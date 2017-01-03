@@ -26,12 +26,11 @@ public class Serveur {
 			// Récupère les informations du buffer
 			InputStreamReader ISR = new InputStreamReader(S.getInputStream());
 			BufferedReader BR = new BufferedReader(ISR);
-			String calcul = BR.readLine();
-			
+			String donnee = BR.readLine();
+			System.out.println(donnee);
 
 			// Renvoie les données dans le buffer
 			PrintWriter PW = new PrintWriter(S.getOutputStream());
-			PW.println(res);
 			PW.flush();
 			
 		}
