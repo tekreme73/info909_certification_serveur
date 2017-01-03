@@ -28,16 +28,19 @@ public class Serveur {
 			BufferedReader BR = new BufferedReader(ISR);
 			String donnee = BR.readLine();
 			System.out.println(donnee);
+			
+			// Si donnee est null
+			if (donnee == null) { break; }
 
 			// Renvoie les données dans le buffer
 			PrintWriter PW = new PrintWriter(S.getOutputStream());
+			PW.println("a reçu les données");
 			PW.flush();
 			
 		}
 		
+		
 		System.out.println("serveur OFF");
-		
-		
 	}
 	
 }
