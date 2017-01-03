@@ -1,59 +1,44 @@
-/**
- *
- */
 package fr.usmb.isc.m2;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-import generic.BufferedReader;
-import generic.InputStreamReader;
-import generic.MoteurCalculSimple;
-import generic.PrintWriter;
-import generic.String;
+public class Serveur {
 
-/**
- * 
- * @author Abdou ABDELMOUMNI(abdou.abdelmoumni@etu.univ-smb.fr)
- * @author Rémi REBILLARD (remi.rebillard@etu.univ-smb.fr)
- * @author Fanny RIBARD (fanny.ribard@etu.univ-smb.fr)
- * @author Loïc ROBERGEON (loic.robergeon@etu.univ-smb.fr)
- */
-public class Serveur
-{
-	public static int			DEFAULT_PORT	= 2000;
+	public static void main(String[] args) throws UnknownHostException, IOException, ExpressionInvalide{
 
-	private final ServerSocket	server;
-
-	public Serveur () throws IOException {
-		this( Serveur.DEFAULT_PORT );
-	}
-
-	public Serveur ( int port ) throws IOException {
-		this.server = new ServerSocket( port );
 		
+		System.out.println("serveur ON");
+		
+		// Ouverture du socket, avec le port 2011
+		ServerSocket ServerS = new ServerSocket(2011);
+		// Accepte les clients
+		Socket S = ServerS.accept();
+
 		// Tant que la socket est ouverte
 		while(true){
 			
 			// Récupère les informations du buffer
 			InputStreamReader ISR = new InputStreamReader(S.getInputStream());
-			BufferedReader BR = new BufferedReader(ISR);			
+			BufferedReader BR = new BufferedReader(ISR);
+			String calcul = BR.readLine();
 			
+
 			// Renvoie les données dans le buffer
 			PrintWriter PW = new PrintWriter(S.getOutputStream());
 			PW.println(res);
 			PW.flush();
 			
 		}
-				
-				
+		
+		System.out.println("serveur OFF");
+		
+		
 	}
-
-	/**
-	 * @return the server
-	 */
-	public ServerSocket getServer ()
-	{
-		return this.server;
-	}
+	
 }
