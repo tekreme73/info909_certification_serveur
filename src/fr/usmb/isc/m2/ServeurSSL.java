@@ -8,19 +8,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 
 public class ServeurSSL {
   public static void main(String[] argv) throws Exception {
-    int port = 443;
+    int port = 8080;
     
-    ServerSocketFactory ssocketFactory = SSLServerSocketFactory.getDefault();
-    ServerSocket ssocket = ssocketFactory.createServerSocket(port);
+    SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+    SSLServerSocket serverSocket = (SSLServerSocket) factory.createServerSocket(port);
     
     while(true){
     	
     	System.out.println("Serveur accepté");
-        Socket socket = ssocket.accept();
+    	SSLSocket socket = (SSLSocket) serverSocket.accept();
+        socket.startHandshake();
+        System.out.println(socket.getRemoteSocketAddress());
         
      // Tant que la socket est ouverte
      		while ( true )
