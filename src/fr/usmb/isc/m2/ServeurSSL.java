@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
 public class ServeurSSL
@@ -14,10 +15,11 @@ public class ServeurSSL
 	public static void main ( String[] args ) throws UnknownHostException, IOException
 	{
 		System.out.println( "serveur ON" );
+		SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 		
 		// Ouverture du socket, avec le port spécifique
 		int port = 8080;
-		ServerSocket ServerS = new ServerSocket( port );
+		SSLServerSocket ServerS = (SSLServerSocket) factory.createServerSocket( port );
 		// Accepte les clients
 		SSLSocket S = (SSLSocket) ServerS.accept();
 		S.startHandshake();
