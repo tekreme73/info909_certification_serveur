@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,68 +13,60 @@ import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.net.ssl.CertPathTrustManagerParameters;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 public class ServeurSSL
 {
-	public static void main ( String[] args ) throws UnknownHostException, IOException, NoSuchAlgorithmException, KeyStoreException
+	public static void main ( String[] args ) throws UnknownHostException, IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException
 	{
 		System.out.println( "serveur ON" );
 		SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 		
 		
 		SSLContext ctx = SSLContext.getInstance("TLS");
-		
-
-		TrustManager tm = new X509TrustManager() {
-	    
-
-		@Override
-		public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-			// TODO Auto-generated method stub xx
-			
-		}
-
-		@Override
-		public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public X509Certificate[] getAcceptedIssuers() {
-			// TODO Auto-generated method stub xx
-			return null;
-		}
-	};
-	
-		//KeyStore ks = KeyStore.getInstance("JKS");
-		//FileInputStream in = new FileInputStream("<path to cacerts"");
-		//ks.load(in, "changeit".toCharArray);
-	    
-		
-		InputStream in = new DataInputStream(new FileInputStream(new File("server.crt")));
+				
+		InputStream in = new DataInputStream(new FileInputStream(new File(System.getProperty( "user.dir" ) + "/resources/security/client.cer")));
 		KeyStore ks = KeyStore.getInstance("JKS");
 		ks.load(null, null);
 		
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 		X509Certificate cert = (X509Certificate) cf.generateCertificate(in);
+		
 		in.close();
 		
 		ks.setCertificateEntry("dts", cert);
 		
-		char[] newpass = "password".toCharArray();
-		String name = "mykeystore.ks";
-		FileOutputStream output = new FileOutputStream(name);
-		ks.store(output, newpass);
+		char[] newpass = "azerty".toCharArray();
+		//String name = "mykeystore.ks";
+		//FileOutputStream output = new FileOutputStream(name);
+		//ks.store(output, newpass);
+		
+		/* créer un SSLContext utilisant cette TrustManagerFactory */
+		/* ici on configure le contexte SSL */
+		
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance( "X.509" );
+		tmf.init( new CertPathTrustManagerParameters( params ) );
+		
+		ctx.init( null, tmf.getTrustManagers(), null );
+		
+		SSLSocketFactory sslSocketFactory = ctx.getSocketFactory();
+		
+		SSLSocket sslSocket = (SSLSocket) sslSocketFactory.createSocket( address, port );
+
 		
 		KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 		kmf.init(ks, "password".toCharArray());
