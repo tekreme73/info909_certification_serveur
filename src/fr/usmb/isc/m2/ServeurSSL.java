@@ -30,9 +30,9 @@ public class ServeurSSL
 			SSLSocket s = (SSLSocket) ss.accept();
 			
 			// Récupère les informations du buffer
-			InputStreamReader ISR = new InputStreamReader( s.getInputStream() );
-			BufferedReader BR = new BufferedReader( ISR );
-			String donnee = BR.readLine();
+			InputStreamReader isr = new InputStreamReader( s.getInputStream() );
+			BufferedReader br = new BufferedReader( isr );
+			String donnee = br.readLine();
 			System.out.println( donnee );
 			
 			// Si donnee est null
@@ -42,9 +42,9 @@ public class ServeurSSL
 			}
 			
 			// Renvoie les données dans le buffer
-			PrintWriter PW = new PrintWriter( s.getOutputStream() );
-			PW.println( "a reçu les données" );
-			PW.flush();
+			PrintWriter pw = new PrintWriter( s.getOutputStream() );
+			pw.println( "a reçu les données" );
+			pw.flush();
 		}
 		System.out.println( "serveur OFF" );
 		ss.close();
