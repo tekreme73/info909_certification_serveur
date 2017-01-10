@@ -107,7 +107,7 @@ public class HTTPSServer
 		try
 		{
 			KeyStore keyStore = KeyStore.getInstance( "JKS" );
-			keyStore.load( new FileInputStream( System.getProperty( "user.dir" ) + "/resources/security/clientkeystore" ),
+			keyStore.load( new FileInputStream( System.getProperty( "user.dir" ) + "/resources/security/clientkeystore.jks" ),
 					"azerty".toCharArray() );
 			
 			// Create key manager
