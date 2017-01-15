@@ -12,7 +12,6 @@ import javax.net.ssl.SSLSocket;
 
 class SecureServer
 {
-	//java -Djavax.net.ssl.keyStore=monCertificat -Djavax.net.ssl.keyStorePassword=motdepasse SecureServer
 	public static void main ( String args[] ) throws Exception
 	{
 		System.err.println( " main for connection… " );
